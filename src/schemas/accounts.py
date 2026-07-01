@@ -3,7 +3,7 @@ from pydantic import BaseModel, EmailStr, Field
 
 class UserRegistrationRequestSchema(BaseModel):
     email: EmailStr
-    password: str = Field(..., min_length=8, description="Password must be at least 8 characters long")
+    password: str = Field(...)
 
 
 class UserRegistrationResponseSchema(BaseModel):

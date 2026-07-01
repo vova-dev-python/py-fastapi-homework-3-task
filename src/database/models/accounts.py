@@ -22,7 +22,7 @@ from sqlalchemy.orm import (
     validates
 )
 
-from database import Base
+from src.database.models.base import Base
 from src.database.validators import accounts as validators
 from src.security.passwords import hash_password, verify_password
 from src.security.utils import generate_secure_token
@@ -118,13 +118,24 @@ class UserModel(Base):
     def password(self) -> None:
         raise AttributeError("Password is write-only. Use the setter to set the password.")
 
+    @property
+    def hashed_password(self) -> str:
+        """Getter for compatibility with old authorization code."""
+        return self._hashed_password
+
     @password.setter
     def password(self, raw_password: str) -> None:
         """
         Set the user's password after validating its strength and hashing it.
         """
-        validators.validate_password_strength(raw_password)
-        self._hashed_password = hash_password(raw_password)
+        try:
+            validators.validate_password_strength(raw_password)
+        except ValueError as e:
+            if len(raw_password) < 8:
+                raise ValueError("Password must contain at least 8 characters.")
+            raise e
+
+        self._hashed_password = hash_password(raw_password)  # type: ignore
 
     def verify_password(self, raw_password: str) -> bool:
         """

@@ -190,7 +190,7 @@ The `get_db` function is a generator that provides a SQLAlchemy session for inte
 ```python
 from fastapi import Depends, APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
-from database import get_db  # Import the get_db generator
+from src.database import get_db  # Import the get_db generator
 
 router = APIRouter()
 
@@ -209,7 +209,7 @@ async def example_route(db: AsyncSession = Depends(get_db)):
 - Additional dependency injection functions like `get_settings` and `get_jwt_auth_manager` can be imported from the `config` package for other common application needs:
 
 ```python
-from config import get_settings, get_jwt_auth_manager
+from src.config import get_settings, get_jwt_auth_manager
 ``` 
 
 You can use this pattern across your application for any routes that need database access or other common dependencies. This modular approach improves code maintainability and testability.
