@@ -5,12 +5,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-from config import get_settings
+from src.config import settings
 
-settings = get_settings()
+pg_user = getattr(settings, 'POSTGRES_USER', 'test_user')
+pg_pass = getattr(settings, 'POSTGRES_PASSWORD', 'test_password')
+pg_host = getattr(settings, 'POSTGRES_HOST', 'localhost')
+pg_port = getattr(settings, 'POSTGRES_DB_PORT', 5432)
+pg_db = getattr(settings, 'POSTGRES_DB', 'test_db')
 
-POSTGRESQL_DATABASE_URL = (f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@"
-                           f"{settings.POSTGRES_HOST}:{settings.POSTGRES_DB_PORT}/{settings.POSTGRES_DB}")
+POSTGRESQL_DATABASE_URL = f"postgresql+asyncpg://{pg_user}:{pg_pass}@{pg_host}:{pg_port}/{pg_db}"
 postgresql_engine = create_async_engine(POSTGRESQL_DATABASE_URL, echo=False)
 AsyncPostgresqlSessionLocal = sessionmaker(  # type: ignore
     bind=postgresql_engine,

@@ -1,19 +1,27 @@
 import pytest_asyncio
+
+import os
+import sys
+
+src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if src_path in sys.path:
+    sys.path.remove(src_path)
+
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from config import get_settings
-from database import (
+from src.config import get_settings
+from src.database import (
     reset_database,
     get_db_contextmanager,
     UserGroupEnum,
     UserGroupModel
 )
-from database.populate import CSVDatabaseSeeder
+from src.database.populate import CSVDatabaseSeeder
 from main import app
-from security.interfaces import JWTAuthManagerInterface
-from security.token_manager import JWTAuthManager
+from src.security.interfaces import JWTAuthManagerInterface
+from src.security.token_manager import JWTAuthManager
 
 
 @pytest_asyncio.fixture(scope="function", autouse=True)

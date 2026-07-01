@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, Optional
 
 from pydantic_settings import BaseSettings
 
@@ -29,7 +29,21 @@ class TestingSettings(BaseAppSettings):
     SECRET_KEY_REFRESH: str = "SECRET_KEY_REFRESH"
     JWT_SIGNING_ALGORITHM: str = "HS256"
 
-    def model_post_init(self, __context: dict[str, Any] | None = None) -> None:
+    MAIL_USERNAME: str = "test@example.com"
+    MAIL_PASSWORD: str = "test_password"
+    MAIL_FROM: str = "test@example.com"
+    MAIL_PORT: int = 587
+    MAIL_SERVER: str = "localhost"
+    MAIL_FROM_NAME: str = "Test"
+    MAIL_STARTTLS: bool = True
+    MAIL_SSL_TLS: bool = False
+    USE_CREDENTIALS: bool = False
+    VALIDATE_CERTS: bool = False
+
+    SUPPRESS_SEND: bool = True
+    TESTING: bool = True
+
+    def model_post_init(self, __context: Optional[Dict[str, Any]] = None) -> None:
         object.__setattr__(self, 'PATH_TO_DB', ":memory:")
         object.__setattr__(
             self,

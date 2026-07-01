@@ -16,7 +16,7 @@ from schemas import (
     MovieListItemSchema,
     MovieDetailSchema
 )
-from schemas.movies import MovieCreateSchema, MovieUpdateSchema
+from src.schemas.movies import MovieCreateSchema, MovieUpdateSchema
 
 router = APIRouter()
 
